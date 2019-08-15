@@ -4,7 +4,11 @@ import constants
 def Search(params):
 
     website = params['website']
+    if not website:
+        raise Exception("Please enter a valid website to search.")
     keywords = params['keywords']
+    if not keywords:
+        raise Exception("Please enter a valid search keyword.")
     langcode = constants.LANGCODES[params['language']]
     numResults = int(params['numResults'])
 
@@ -16,7 +20,7 @@ def Search(params):
         searchID = config['Keys']['CustomSearchID']
         searchKey = config['Keys']['APIKey']
     except:
-        raise Exception("Missing API Keys in Configuration File")
+        raise Exception("Missing API Keys in Configuration File.")
 
     URL = "https://www.googleapis.com/customsearch/v1"
 

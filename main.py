@@ -25,7 +25,7 @@ while True:
             output.WriteToXLS(filename, items)
             sg.Popup('Search successful!', 'Results saved to ' + filename)
         except Exception as e:
-            sg.Popup(e)
+            sg.PopupError(e)
     elif event is None or event == 'Exit':
         break
     print(event, values)
