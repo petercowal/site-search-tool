@@ -3,3 +3,6 @@ build/
 dist/
 
 config.ini
+
+*.xlsx
+*.csv
