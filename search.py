@@ -1,9 +1,11 @@
 import requests, configparser
+import constants
 
 def Search(params):
 
     website = params['website']
     keywords = params['keywords']
+    langcode = constants.LANGCODES[params['language']]
     numResults = int(params['numResults'])
 
     # read in API keys from configuration file
@@ -23,6 +25,7 @@ def Search(params):
         params = {'key':searchKey,
                   'cx':searchID,
                   'q':'site:' + website + ' ' + keywords,
+                  'lr':langcode,
                   'start':i}
 
         r = requests.get(URL, params)
