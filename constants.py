@@ -1,4 +1,5 @@
 LANGCODES = {
+    "(default)" : "",
     "Arabic" : "lang_ar",
     "Bulgarian" : "lang_bg",
     "Catalan" : "lang_ca",

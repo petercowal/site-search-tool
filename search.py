@@ -29,8 +29,10 @@ def Search(params):
         params = {'key':searchKey,
                   'cx':searchID,
                   'q':'site:' + website + ' ' + keywords,
-                  'lr':langcode,
                   'start':i}
+                  
+        if langcode != "":
+            params['lr'] = langcode
 
         r = requests.get(URL, params)
 

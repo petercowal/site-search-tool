@@ -20,7 +20,7 @@ while True:
     if event == 'search':
         try:
             items = search.Search(values)
-            siteNameAlphaNum = ''.join(a for a in values['website'] if a.isalnum())
+            siteNameAlphaNum = values['keywords'] + '_' + ''.join(a if a.isalnum() else "_" for a in values['website'])
             filename = os.path.join(values['outdir'], siteNameAlphaNum + '.xlsx')
             output.WriteToXLS(filename, items)
             sg.Popup('Search successful!', 'Results saved to ' + filename)
