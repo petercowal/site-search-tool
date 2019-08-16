@@ -1,3 +1,4 @@
+import PySimpleGUI as sg
 import requests, configparser
 import constants
 
@@ -10,7 +11,7 @@ def Search(params):
     if not keywords:
         raise Exception("Please enter a valid search keyword.")
     langcode = constants.LANGCODES[params['language']]
-    numResults = int(params['numResults'])
+    numResults = min(int(params['numResults']), 100)
 
     # read in API keys from configuration file
     config = configparser.ConfigParser()
@@ -25,12 +26,13 @@ def Search(params):
     URL = "https://www.googleapis.com/customsearch/v1"
 
     items = []
-    for i in range(1, min(numResults, 100), 10):
+    for i in range(1, numResults, 10):
+        sg.OneLineProgressMeter('Search Progress', i, numResults, 'search_meter')
         params = {'key':searchKey,
                   'cx':searchID,
                   'q':'site:' + website + ' ' + keywords,
                   'start':i}
-                  
+
         if langcode != "":
             params['lr'] = langcode
 
@@ -42,5 +44,5 @@ def Search(params):
             items += data['items']
         else:
             break
-
+    sg.OneLineProgressMeter('Search Progress', numResults, numResults, 'search_meter')
     return items
