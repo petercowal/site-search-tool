@@ -1,4 +1,5 @@
-from newspaper import Article
+from urllib.request import Request, urlopen
+from bs4 import BeautifulSoup
 import os, time, random
 import PySimpleGUI as sg
 
@@ -15,12 +16,19 @@ def DownloadArticles(foldername, urls):
         if i > 0:
             time.sleep(random.uniform(3.0,7.0))
 
-        article = Article(urls[i])
-        article.build()
-
         articleFilePath = os.path.join(foldername, 'article' + str(i + 1) + '.txt')
         f = open(articleFilePath, "w")
-        f.write(article.text)
+
+        req = Request(urls[i], headers={'User-Agent': 'Mozilla/5.0'})
+        response = urlopen(req).read()
+
+        soup = BeautifulSoup(response, "html.parser")
+        pTags = soup.findAll('p')
+        for ptag in pTags:
+            par = str(ptag.string)
+            if par != "None":
+                f.write(par + "\n\n")
+
         f.close()
 
     sg.OneLineProgressMeter('Download Progress', numUrls, numUrls, 'download_meter')
