@@ -1,6 +1,6 @@
 import PySimpleGUI as sg
 import os
-import search, output, constants
+import search, output, constants, scrape
 # initialize GUI
 window_rows = [
     [sg.Text('Website to Search')],
@@ -24,6 +24,13 @@ while True:
             filename = os.path.join(values['outdir'], siteNameAlphaNum + '.xlsx')
             output.WriteToXLS(filename, items)
             sg.Popup('Search successful!', 'Results saved to ' + filename)
+
+            articleFolder = os.path.join(values['outdir'], siteNameAlphaNum)
+            urls = []
+            for item in items:
+                urls.append(item['link'])
+            scrape.DownloadArticles(articleFolder, urls)
+
         except Exception as e:
             sg.PopupError(e)
     elif event is None or event == 'Exit':
