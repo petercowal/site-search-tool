@@ -6,3 +6,4 @@ config.ini
 
 *.xlsx
 *.csv
+*.spec
