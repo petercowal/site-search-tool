@@ -2,6 +2,7 @@ from urllib.request import Request, urlopen
 from bs4 import BeautifulSoup
 import os, time, random
 import PySimpleGUI as sg
+from cleanup import cleanUpString
 
 def DownloadArticles(foldername, urls):
 
@@ -27,7 +28,7 @@ def DownloadArticles(foldername, urls):
         for ptag in pTags:
             par = str(ptag.string)
             if par != "None":
-                f.write(par + "\n\n")
+                f.write(cleanUpString(par) + "\n\n")
 
         f.close()
 
