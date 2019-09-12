@@ -2,7 +2,7 @@ from urllib.request import Request, urlopen
 from bs4 import BeautifulSoup
 import os, time, random
 import PySimpleGUI as sg
-from cleanup import cleanUpString
+from cleanup import cleanUpString, snakeCase
 
 def DownloadArticles(foldername, articles):
 
@@ -18,7 +18,7 @@ def DownloadArticles(foldername, articles):
         if i > 0:
             time.sleep(random.uniform(3.0,7.0))
 
-        articleFilePath = os.path.join(foldername, 'article' + str(i + 1) + '.txt')
+        articleFilePath = os.path.join(foldername, 'article' + str(i + 1) + '_' + snakeCase(article.title) + '.txt')
         f = open(articleFilePath, "w")
 
         f.write(cleanUpString(article.title) + '\n')

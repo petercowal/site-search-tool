@@ -2,6 +2,7 @@ import PySimpleGUI as sg
 import os
 import search, output, constants, scrape
 from article import Article
+from cleanup import snakeCase
 import time
 # initialize GUI
 window_rows = [
@@ -25,7 +26,7 @@ while True:
                                 values['keywords'],
                                 values['language'],
                                 values['numResults'])
-            siteNameAlphaNum = values['keywords'] + '_' + ''.join(a if a.isalnum() else "_" for a in values['website'])
+            siteNameAlphaNum = values['keywords'] + '_' + snakeCase(values['website'])
             timestring = time.strftime('%Y_%m_%d__%H_%M')
             filename = os.path.join(values['outdir'], siteNameAlphaNum + '_' + timestring + '.xlsx')
             output.WriteToXLS(filename, items)
