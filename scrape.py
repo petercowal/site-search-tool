@@ -24,18 +24,21 @@ def DownloadArticles(foldername, articles):
         f.write(cleanUpString(article.title) + '\n')
         f.write(article.url + '\n\n')
 
-        try:
-            req = Request(article.url, headers={'User-Agent': 'Mozilla/5.0'})
-            response = urlopen(req).read()
+        if article.url.endswith('.pdf'):
+            f.write("(This article is a PDF, and currently must be manually opened.)")
+        else:
+            try:
+                req = Request(article.url, headers={'User-Agent': 'Mozilla/5.0'})
+                response = urlopen(req).read()
 
-            soup = BeautifulSoup(response, "html.parser")
-            pTags = soup.findAll('p')
-            for ptag in pTags:
-                par = str(ptag.string)
-                if par != "None":
-                    f.write(cleanUpString(par) + "\n\n")
-        except Exception as e:
-            f.write("\nSCRAPER ERROR\n" + str(e))
+                soup = BeautifulSoup(response, "html.parser")
+                pTags = soup.findAll('p')
+                for ptag in pTags:
+                    par = str(ptag.string)
+                    if par != "None":
+                        f.write(cleanUpString(par) + "\n\n")
+            except Exception as e:
+                f.write("\nSCRAPER ERROR\n" + str(e))
         f.close()
 
     sg.OneLineProgressMeter('Download Progress', numUrls, numUrls, 'download_meter')
