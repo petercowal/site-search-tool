@@ -1,3 +1,5 @@
+import re
+
 def cleanUpString(str):
     unicodeEquivalents = {
         '“' : '\"',
@@ -9,4 +11,4 @@ def cleanUpString(str):
     return str
 
 def snakeCase(str):
-    return (''.join(a if a.isalnum() else "_" for a in str)).strip('_')
+    return re.sub("__+", "_", (''.join(a if a.isalnum() else "_" for a in str)).strip('_'))
