@@ -1,6 +1,8 @@
 import PySimpleGUI as sg
 import os
 import search, output, constants, scrape
+from article import Article
+import time
 # initialize GUI
 window_rows = [
     [sg.Text('Website to Search')],
@@ -19,17 +21,21 @@ while True:
     event, values = window.Read()
     if event == 'search':
         try:
-            items = search.Search(values)
+            items = search.Search(values['website'],
+                                values['keywords'],
+                                values['language'],
+                                values['numResults'])
             siteNameAlphaNum = values['keywords'] + '_' + ''.join(a if a.isalnum() else "_" for a in values['website'])
-            filename = os.path.join(values['outdir'], siteNameAlphaNum + '.xlsx')
+            timestring = time.strftime('%Y_%m_%d__%H_%M')
+            filename = os.path.join(values['outdir'], siteNameAlphaNum + '_' + timestring + '.xlsx')
             output.WriteToXLS(filename, items)
             sg.Popup('Search successful!', 'Results saved to ' + filename)
 
-            articleFolder = os.path.join(values['outdir'], siteNameAlphaNum)
-            urls = []
+            articleFolder = os.path.join(values['outdir'], siteNameAlphaNum + '_' + timestring)
+            articles = []
             for item in items:
-                urls.append(item['link'])
-            scrape.DownloadArticles(articleFolder, urls)
+                articles.append(Article(item['title'], item['link']))
+            scrape.DownloadArticles(articleFolder, articles)
 
         except Exception as e:
             sg.PopupError(e)

@@ -2,16 +2,14 @@ import PySimpleGUI as sg
 import requests, configparser
 import constants
 
-def Search(params):
+def Search(website, keywords, language, numResults):
 
-    website = params['website']
     if not website:
         raise Exception("Please enter a valid website to search.")
-    keywords = params['keywords']
     if not keywords:
         raise Exception("Please enter a valid search keyword.")
-    langcode = constants.LANGCODES[params['language']]
-    numResults = min(int(params['numResults']), 100)
+    langcode = constants.LANGCODES[language]
+    numResults = min(int(numResults), 100)
 
     # read in API keys from configuration file
     config = configparser.ConfigParser()
@@ -28,15 +26,15 @@ def Search(params):
     items = []
     for i in range(1, numResults, 10):
         sg.OneLineProgressMeter('Search Progress', i, numResults, 'search_meter')
-        params = {'key':searchKey,
-                  'cx':searchID,
-                  'q':'site:' + website + ' ' + keywords,
-                  'start':i}
+        google_params = {'key':searchKey,
+                          'cx':searchID,
+                          'q':'site:' + website + ' ' + keywords,
+                          'start':i}
 
         if langcode != "":
-            params['lr'] = langcode
+            google_params['lr'] = langcode
 
-        r = requests.get(URL, params)
+        r = requests.get(URL, google_params)
 
         data = r.json()
 
