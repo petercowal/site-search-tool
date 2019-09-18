@@ -12,6 +12,9 @@ window_rows = [
     [sg.InputText('', key='keywords')],
     [sg.Text('Number of Results'), sg.InputCombo([10,20,30,50,100], key='numResults')],
     [sg.Text('Language'), sg.InputCombo(sorted(list(constants.LANGCODES.keys())), key='language')],
+
+    [sg.Checkbox('Automatically Download Articles', default=True, key='downloadArticles')],
+
     [sg.Text('Output Directory'),sg.InputText('',key='outdir')],
     [sg.FolderBrowse("Select Output Directory", target='outdir'), sg.Button("Run Search", key='search')]
 ]
@@ -32,11 +35,12 @@ while True:
             output.WriteToXLS(filename, items)
             sg.Popup('Search successful!', 'Results saved to ' + filename)
 
-            articleFolder = os.path.join(values['outdir'], siteNameAlphaNum + '_' + timestring)
-            articles = []
-            for item in items:
-                articles.append(Article(item['title'], item['link']))
-            scrape.DownloadArticles(articleFolder, articles)
+            if values['downloadArticles']:
+                articleFolder = os.path.join(values['outdir'], siteNameAlphaNum + '_' + timestring)
+                articles = []
+                for item in items:
+                    articles.append(Article(item['title'], item['link']))
+                scrape.DownloadArticles(articleFolder, articles)
 
         except Exception as e:
             sg.PopupError(e)
