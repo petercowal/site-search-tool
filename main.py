@@ -13,6 +13,10 @@ window_rows = [
     [sg.Text('Number of Results'), sg.InputCombo([10,20,30,50,100], key='numResults')],
     [sg.Text('Language'), sg.InputCombo(sorted(list(constants.LANGCODES.keys())), key='language')],
 
+    [sg.Checkbox('Restrict Results to the Past', default=False, key='restrictDates'),
+        sg.InputText('1',size=(3,1),key='dateRestrictNum'),
+        sg.InputCombo(['Days','Weeks','Months','Years'],key='dateRestrictType')],
+
     [sg.Checkbox('Automatically Download Articles', default=True, key='downloadArticles')],
 
     [sg.Text('Output Directory'),sg.InputText('',key='outdir')],
@@ -25,10 +29,17 @@ while True:
     event, values = window.Read()
     if event == 'search':
         try:
+            if values['restrictDates']:
+                dateRestriction = search.DateRestriction(int(values['dateRestrictNum']), values['dateRestrictType'])
+            else:
+                dateRestriction = None
+
             items = search.Search(values['website'],
                                 values['keywords'],
                                 values['language'],
-                                values['numResults'])
+                                values['numResults'],
+                                dateRestriction)
+
             siteNameAlphaNum = values['keywords'] + '_' + snakeCase(values['website'])
             timestring = time.strftime('%Y_%m_%d__%H_%M')
             filename = os.path.join(values['outdir'], siteNameAlphaNum + '_' + timestring + '.xlsx')

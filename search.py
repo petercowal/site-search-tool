@@ -2,7 +2,16 @@ import PySimpleGUI as sg
 import requests, configparser
 import constants
 
-def Search(website, keywords, language, numResults):
+
+class DateRestriction:
+    def __init__(self, num, dateType):
+        self.num = num
+        self.dateType = dateType[0].lower()
+
+    def __str__(self):
+        return self.dateType + str(self.num)
+
+def Search(website, keywords, language, numResults, dateRestrict):
 
     if not website:
         raise Exception("Please enter a valid website to search.")
@@ -33,6 +42,9 @@ def Search(website, keywords, language, numResults):
 
         if langcode != "":
             google_params['lr'] = langcode
+
+        if not dateRestrict is None:
+            google_params['dateRestrict'] = str(dateRestrict)
 
         r = requests.get(URL, google_params)
 
