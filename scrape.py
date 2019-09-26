@@ -22,6 +22,7 @@ def DownloadArticles(foldername, articles):
         f = open(articleFilePath, "w")
 
         f.write(cleanUpString(article.title) + '\n')
+        f.write(article.date + '\n')
         f.write(article.url + '\n\n')
 
         if article.url.endswith('.pdf'):

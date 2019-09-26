@@ -34,7 +34,7 @@ while True:
             else:
                 dateRestriction = None
 
-            items = search.Search(values['website'],
+            articles = search.Search(values['website'],
                                 values['keywords'],
                                 values['language'],
                                 values['numResults'],
@@ -43,18 +43,16 @@ while True:
             siteNameAlphaNum = values['keywords'] + '_' + snakeCase(values['website'])
             timestring = time.strftime('%Y_%m_%d__%H_%M')
             filename = os.path.join(values['outdir'], siteNameAlphaNum + '_' + timestring + '.xlsx')
-            output.WriteToXLS(filename, items)
+            output.WriteToXLS(filename, articles)
             sg.Popup('Search successful!', 'Results saved to ' + filename)
 
             if values['downloadArticles']:
                 articleFolder = os.path.join(values['outdir'], siteNameAlphaNum + '_' + timestring)
-                articles = []
-                for item in items:
-                    articles.append(Article(item['title'], item['link']))
                 scrape.DownloadArticles(articleFolder, articles)
 
         except Exception as e:
             sg.PopupError(e)
+
     elif event is None or event == 'Exit':
         break
 

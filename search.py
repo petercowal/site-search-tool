@@ -1,7 +1,7 @@
 import PySimpleGUI as sg
 import requests, configparser
-import constants
-
+import constants, article
+import dateutil.parser
 
 class DateRestriction:
     def __init__(self, num, dateType):
@@ -55,4 +55,15 @@ def Search(website, keywords, language, numResults, dateRestrict):
         else:
             break
     sg.OneLineProgressMeter('Search Progress', numResults, numResults, 'search_meter')
-    return items
+
+    return list(map(articleFromResult, items))
+
+def articleFromResult(item):
+    try:
+        articleDate = dateutil.parser.parse(item['pagemap']['metatags'][0]['article:published_time']).strftime('%m-%d-%Y')
+    except:
+        articleDate = ""
+    return article.Article(item['title'],
+        item['link'],
+        articleDate,
+        item['snippet'])
