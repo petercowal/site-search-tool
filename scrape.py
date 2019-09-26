@@ -35,9 +35,7 @@ def DownloadArticles(foldername, articles):
                 soup = BeautifulSoup(response, "html.parser")
                 pTags = soup.findAll('p')
                 for ptag in pTags:
-                    par = str(ptag.string)
-                    if par != "None":
-                        f.write(cleanUpString(par) + "\n\n")
+                    f.write(cleanUpString(ptag.get_text()) + "\n\n")
             except Exception as e:
                 f.write("\nSCRAPER ERROR\n" + str(e))
         f.close()
