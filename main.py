@@ -57,6 +57,5 @@ while True:
             sg.PopupError(e)
     elif event is None or event == 'Exit':
         break
-    print(event, values)
 
 window.Close()
