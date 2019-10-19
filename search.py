@@ -44,7 +44,7 @@ def Search(website, keywords, language, numResults, dateRestrict):
             google_params['lr'] = langcode
 
         if not dateRestrict is None:
-            google_params['dateRestrict'] = str(dateRestrict)
+            google_params['sort'] = 'date:r:' + str(dateRestrict) + '0101:' + str(dateRestrict + 1) + '0101'
 
         r = requests.get(URL, google_params)
 

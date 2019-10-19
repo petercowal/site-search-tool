@@ -13,9 +13,8 @@ window_rows = [
     [sg.Text('Number of Results'), sg.InputCombo([10,20,30,50,100], key='numResults')],
     [sg.Text('Language'), sg.InputCombo(sorted(list(constants.LANGCODES.keys())), key='language')],
 
-    [sg.Checkbox('Restrict Results to the Past', default=False, key='restrictDates'),
-        sg.InputText('1',size=(3,1),key='dateRestrictNum'),
-        sg.InputCombo(['Days','Weeks','Months','Years'],key='dateRestrictType')],
+    [sg.Checkbox('Restrict Results to the year', default=True, key='restrictDates'),
+        sg.InputText('2019',key='dateRestrictNum')],
 
     [sg.Checkbox('Automatically Download Articles', default=True, key='downloadArticles')],
 
@@ -30,7 +29,7 @@ while True:
     if event == 'search':
         try:
             if values['restrictDates']:
-                dateRestriction = search.DateRestriction(int(values['dateRestrictNum']), values['dateRestrictType'])
+                dateRestriction = int(values['dateRestrictNum'])
             else:
                 dateRestriction = None
 
@@ -41,6 +40,8 @@ while True:
                                 dateRestriction)
 
             siteNameAlphaNum = values['keywords'] + '_' + snakeCase(values['website'])
+            if dateRestriction != None:
+                siteNameAlphaNum = str(dateRestriction) + '_' + siteNameAlphaNum
             timestring = time.strftime('%Y_%m_%d__%H_%M')
             filename = os.path.join(values['outdir'], siteNameAlphaNum + '_' + timestring + '.xlsx')
             output.WriteToXLS(filename, articles)
