@@ -47,7 +47,7 @@ while True:
             output.WriteToXLS(filename, articles)
             sg.Popup('Search successful!', 'Results saved to ' + filename)
 
-            if values['downloadArticles']:
+            if values['downloadArticles'] and len(articles) > 0:
                 articleFolder = os.path.join(values['outdir'], siteNameAlphaNum + '_' + timestring)
                 scrape.DownloadArticles(articleFolder, articles)
 
