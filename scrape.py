@@ -29,7 +29,7 @@ def DownloadArticles(foldername, articles):
             f.write("(This article is a PDF, and currently must be manually opened.)")
         else:
             try:
-                req = Request(article.url, headers={'User-Agent': 'Mozilla/5.0'})
+                req = Request(article.url, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'})
                 response = urlopen(req).read()
 
                 soup = BeautifulSoup(response, "html.parser")
